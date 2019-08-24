@@ -6,5 +6,4 @@ const money = 25,
     period = 3;
 
 alert('We have ' + money + ' of money');
-
 console.log(mission);
