@@ -1,7 +1,7 @@
 'use strict'
 
 let money,
-    income,
+    income = 'freelance',
     addExpenses,
     deposit,
     mission = 5000000,
