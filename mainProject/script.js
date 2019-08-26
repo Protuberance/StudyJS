@@ -30,10 +30,10 @@ console.log(typeof money);
 console.log(typeof income);
 console.log(typeof deposit);
 
-let monthlyExpenseName1 = prompt('Какие обязательные ежемесячные расходы у вас есть?');
-let monthlyExpenseValue1 = +prompt('Во сколько это обойдется?');
-let monthlyExpenseName2 = prompt('Какие обязательные ежемесячные расходы у вас есть?');
-let monthlyExpenseValue2 = +prompt('Во сколько это обойдется?');
+let monthlyExpenseName1 = prompt('Какие обязательные ежемесячные расходы у вас есть?'),
+    monthlyExpenseValue1 = +prompt('Во сколько это обойдется?'),
+    monthlyExpenseName2 = prompt('Какие обязательные ежемесячные расходы у вас есть?'),
+    monthlyExpenseValue2 = +prompt('Во сколько это обойдется?');
 
 console.log(monthlyExpenseName1);
 console.log(monthlyExpenseValue1);
