@@ -5,19 +5,16 @@ let money,
     addExpenses,
     deposit,
     mission = 5000000,
-    period;
+    period,
+    accumulatedMonth;
 
-money = prompt('Ваш месячный доход?');
+money = prompt('Ваш месячный доход?', 300000);
 
 let succes = false;
 while (!succes) {
-    let response = prompt('Перечислите возможные расходы за рассчитываемый период через запятую');
+    let response = prompt('Перечислите возможные расходы за рассчитываемый период через запятую', 'clothes', 'cinema');
     if (response != null) {
         addExpenses = response.split(', ');
-        addExpenses.forEach(element => {
-            console.log(element);
-        });
-        console.log(addExpenses);
         succes = true;
     } else
         alert('необходимо ввести данные');
@@ -26,33 +23,49 @@ while (!succes) {
 
 deposit = confirm('Есть ли у вас депозит в банке?');
 
-console.log(typeof money);
-console.log(typeof income);
-console.log(typeof deposit);
+const showTypeof  = function(data){
+console.log(data, typeof data);
+}
 
-let monthlyExpenseName1 = prompt('Какие обязательные ежемесячные расходы у вас есть?'),
-    monthlyExpenseValue1 = +prompt('Во сколько это обойдется?'),
-    monthlyExpenseName2 = prompt('Какие обязательные ежемесячные расходы у вас есть?'),
-    monthlyExpenseValue2 = +prompt('Во сколько это обойдется?');
+showTypeof(money);
+showTypeof(income);
+showTypeof(deposit);
 
-console.log(monthlyExpenseName1);
-console.log(monthlyExpenseValue1);
-console.log(typeof monthlyExpenseValue1);
+let monthlyExpenseName1 = prompt('Какие обязательные ежемесячные расходы у вас есть?', 'flat rent'),
+    monthlyExpenseValue1 = +prompt('Во сколько это обойдется?', 35000),
+    monthlyExpenseName2 = prompt('Какие обязательные ежемесячные расходы у вас есть?', 'iiieeeyhhaaaa'),
+    monthlyExpenseValue2 = +prompt('Во сколько это обойдется?', 60000);
 
 let budgetMonth = money - (monthlyExpenseValue1 === NaN ? 0 : monthlyExpenseValue1) - (monthlyExpenseValue2 === NaN ? 0 : monthlyExpenseValue2);
-console.log(budgetMonth);
-
 period = Math.ceil(mission / budgetMonth);
-console.log('Вы накопите ' + mission + ' за ' + period + ' месяцев');
 
 let budgetDay = Math.floor(budgetMonth / 30);
-console.log(budgetDay);
 
-if (budgetDay >= 800)
-    console.log('Высокий уровень дохода');
-else if (budgetDay >= 300 && budgetDay < 800)
-    console.log('Средний уровень дохода');
-else if (budgetDay > 0 && budgetDay < 300)
-    console.log('Низкий уровень дохода');
-else if (budgetDay <= 0)
-    console.log('Что то пошло не так');
+const getStatusIncome = function () {
+    if (budgetDay >= 800)
+        console.log('Высокий уровень дохода');
+    else if (budgetDay >= 300 && budgetDay < 800)
+        console.log('Средний уровень дохода');
+    else if (budgetDay > 0 && budgetDay < 300)
+        console.log('Низкий уровень дохода');
+    else if (budgetDay <= 0)
+        console.log('Что то пошло не так');
+}
+
+getStatusIncome();
+
+const getExpensesMonth = function () {
+    return (monthlyExpenseValue1 === NaN ? 0 : monthlyExpenseValue1) + (monthlyExpenseValue2 === NaN ? 0 : monthlyExpenseValue2);
+}
+//console.log("Сумма всех обязательных расходов за месяц равна " + getExpensesMonth());
+
+const getAccumulatedMonth = function () {
+    return money - getExpensesMonth();
+}
+accumulatedMonth = getAccumulatedMonth();
+console.log("Сумма ваших накоплений за месяц равна " + accumulatedMonth);
+
+const getTargetMonth = function () {
+    return Math.floor(mission / accumulatedMonth);
+}
+console.log('Вы накопите ' + mission + ' за ' + getTargetMonth() + ' месяцев')
