@@ -8,12 +8,17 @@ let money,
     period,
     accumulatedMonth;
 
-money = prompt('Ваш месячный доход?', 300000);
-
+let start = function () {
+    do {
+        money = prompt('Ваш месячный доход?', 300000);
+    }
+    while (money === null || money === '' || isNaN(money))
+}
+start();
 let succes = false;
 while (!succes) {
     let response = prompt('Перечислите возможные расходы за рассчитываемый период через запятую', 'clothes', 'cinema');
-    if (response != null) {
+    if (IsNotOrEmpty(response)) {
         addExpenses = response.split(', ');
         succes = true;
     } else
@@ -23,20 +28,39 @@ while (!succes) {
 
 deposit = confirm('Есть ли у вас депозит в банке?');
 
-const showTypeof  = function(data){
-console.log(data, typeof data);
+const showTypeof = function (data) {
+    console.log(data, typeof data);
 }
 
 showTypeof(money);
 showTypeof(income);
 showTypeof(deposit);
 
-let monthlyExpenseName1 = prompt('Какие обязательные ежемесячные расходы у вас есть?', 'flat rent'),
-    monthlyExpenseValue1 = +prompt('Во сколько это обойдется?', 35000),
-    monthlyExpenseName2 = prompt('Какие обязательные ежемесячные расходы у вас есть?', 'iiieeeyhhaaaa'),
-    monthlyExpenseValue2 = +prompt('Во сколько это обойдется?', 60000);
+let monthlyExpenseName1,
+    monthlyExpenseName2;
 
-let budgetMonth = money - (monthlyExpenseValue1 === NaN ? 0 : monthlyExpenseValue1) - (monthlyExpenseValue2 === NaN ? 0 : monthlyExpenseValue2);
+const getExpensesMonth = function () {
+    let sum = 0;
+    do {
+
+        for (let i = 0; i < 2; i++) {
+            if (i === 0) {
+                monthlyExpenseName1 = prompt('Какие обязательные ежемесячные расходы у вас есть?', 'iiieeeyhhaaaa');
+            }
+            if (i === 1) {
+                monthlyExpenseName2 = prompt('Какие обязательные ежемесячные расходы у вас есть?', 'Flat rent');
+            }
+            sum += +prompt('Во сколько это обойдется?', 35000);
+        }
+    }
+    while (IsNotOrEmpty(monthlyExpenseName1) || IsNotOrEmpty(monthlyExpenseName2) || IsNotNumber(sum))
+
+    return sum;
+}
+let expensesAmout = getExpensesMonth();
+
+
+let budgetMonth = money - expensesAmout;
 period = Math.ceil(mission / budgetMonth);
 
 let budgetDay = Math.floor(budgetMonth / 30);
@@ -52,20 +76,31 @@ const getStatusIncome = function () {
         console.log('Что то пошло не так');
 }
 
-getStatusIncome();
-
-const getExpensesMonth = function () {
-    return (monthlyExpenseValue1 === NaN ? 0 : monthlyExpenseValue1) + (monthlyExpenseValue2 === NaN ? 0 : monthlyExpenseValue2);
-}
-//console.log("Сумма всех обязательных расходов за месяц равна " + getExpensesMonth());
-
 const getAccumulatedMonth = function () {
-    return money - getExpensesMonth();
+    return money - expensesAmout;
 }
 accumulatedMonth = getAccumulatedMonth();
+getStatusIncome();
 console.log("Сумма ваших накоплений за месяц равна " + accumulatedMonth);
 
 const getTargetMonth = function () {
-    return Math.floor(mission / accumulatedMonth);
+    let result = Math.floor(mission / accumulatedMonth);
+    if (result < 0) {
+        return 'Цель не будет достигнута';
+    } else
+        return 'Вы накопите ' + mission + ' за ' + result + ' месяцев';
 }
-console.log('Вы накопите ' + mission + ' за ' + getTargetMonth() + ' месяцев')
+console.log(getTargetMonth());
+
+function IsNotOrEmpty(str) {
+    if (str === '' || str === null || str === undefined)
+        return true;
+    else return false;
+}
+
+function IsNotNumber(isNumber) {
+    if (isNumber === NaN || isNumber === null || isNaN(isNumber))
+        return true;
+    else return false;
+
+}
