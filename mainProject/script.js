@@ -18,7 +18,7 @@ start();
 let succes = false;
 while (!succes) {
     let response = prompt('Перечислите возможные расходы за рассчитываемый период через запятую', 'clothes', 'cinema');
-    if (IsNotOrEmpty(response)) {
+    if (!IsNotOrEmpty(response)) {
         addExpenses = response.split(', ');
         succes = true;
     } else
@@ -40,21 +40,21 @@ let monthlyExpenseName1,
     monthlyExpenseName2;
 
 const getExpensesMonth = function () {
-    let sum = 0;
-    do {
+    let sum = 0,
+        counter;
 
-        for (let i = 0; i < 2; i++) {
-            if (i === 0) {
-                monthlyExpenseName1 = prompt('Какие обязательные ежемесячные расходы у вас есть?', 'iiieeeyhhaaaa');
-            }
-            if (i === 1) {
-                monthlyExpenseName2 = prompt('Какие обязательные ежемесячные расходы у вас есть?', 'Flat rent');
-            }
-            sum += +prompt('Во сколько это обойдется?', 35000);
+    for (let i = 0; i < 2; i++) {
+        if (i === 0) {
+            monthlyExpenseName1 = prompt('Какие обязательные ежемесячные расходы у вас есть?', 'iiieeeyhhaaaa');
         }
+        if (i === 1) {
+            monthlyExpenseName2 = prompt('Какие обязательные ежемесячные расходы у вас есть?', 'Flat rent');
+        }
+        do
+            counter = prompt('Во сколько это обойдется?', 35000);
+        while (IsNotNumber(counter))
+        sum += +counter;
     }
-    while (IsNotOrEmpty(monthlyExpenseName1) || IsNotOrEmpty(monthlyExpenseName2) || IsNotNumber(sum))
-
     return sum;
 }
 let expensesAmout = getExpensesMonth();
@@ -99,7 +99,7 @@ function IsNotOrEmpty(str) {
 }
 
 function IsNotNumber(isNumber) {
-    if (isNumber === NaN || isNumber === null || isNaN(isNumber))
+    if (isNumber === null || isNaN(isNumber))
         return true;
     else return false;
 
