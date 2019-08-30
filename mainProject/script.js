@@ -18,7 +18,7 @@ start();
 let succes = false;
 while (!succes) {
     let response = prompt('Перечислите возможные расходы за рассчитываемый период через запятую', 'clothes', 'cinema');
-    if (!IsNotOrEmpty(response)) {
+    if (response !== '' && response !== null && response !== undefined) {
         addExpenses = response.split(', ');
         succes = true;
     } else
@@ -50,10 +50,12 @@ const getExpensesMonth = function () {
         if (i === 1) {
             monthlyExpenseName2 = prompt('Какие обязательные ежемесячные расходы у вас есть?', 'Flat rent');
         }
-        do
+        do {
             counter = prompt('Во сколько это обойдется?', 35000);
-        while (IsNotNumber(counter))
-        sum += +counter;
+            console.log(counter);
+        }
+        while (counter === null || counter === '' || isNaN(counter))
+        sum += counter;
     }
     return sum;
 }
@@ -76,6 +78,7 @@ const getStatusIncome = function () {
         console.log('Что то пошло не так');
 }
 
+
 const getAccumulatedMonth = function () {
     return money - expensesAmout;
 }
@@ -91,16 +94,3 @@ const getTargetMonth = function () {
         return 'Вы накопите ' + mission + ' за ' + result + ' месяцев';
 }
 console.log(getTargetMonth());
-
-function IsNotOrEmpty(str) {
-    if (str === '' || str === null || str === undefined)
-        return true;
-    else return false;
-}
-
-function IsNotNumber(isNumber) {
-    if (isNumber === null || isNaN(isNumber))
-        return true;
-    else return false;
-
-}
