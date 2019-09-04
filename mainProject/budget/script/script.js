@@ -21,7 +21,8 @@ let incomePeriodValue = document.querySelector('.income_period-value');
 let targetMonthValue = document.querySelector('.target_month-value');
 
 let salaryAmount = document.querySelector('.salary-amount');
-let incomeTitle = document.querySelector('.income-title');
+let incomeTitle = document.querySelector('.income-items').querySelector('.income-title');
+console.log(incomeTitle);
 let incomeAmount = document.querySelector('.income-amount');
 let expensesTitle = document.querySelector('.expenses-title');
 let expensesAmount = document.querySelector('.expenses-amount');
