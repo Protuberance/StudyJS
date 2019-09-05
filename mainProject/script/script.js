@@ -45,14 +45,15 @@ let appData = {
         this.budget = +salaryAmount.value;
 
         this.getExpenses();
-        appData.getIncome();
-        appData.getExpensesMonth();
-        appData.getAddExpenses();
-        appData.getAddIncome();
-        appData.getBudget();
+        this.getIncome();
+        this.getExpensesMonth();
+        this.getAddExpenses();
+        this.getAddIncome();
+        this.getBudget();
 
-        appData.showResult();
-        let inputs = document.querySelectorAll('input');
+        this.showResult();
+
+        let inputs = document.querySelectorAll('.data input');
         inputs.forEach(element => {
             if (element.getAttribute('type') === 'text')
                 element.setAttribute('disabled', 'true');
@@ -74,7 +75,33 @@ let appData = {
         });
     },
     reset: function () {
-        location.reload();
+        this.budget = 0;
+        this.budgetDay = 0;
+        this.budgetMonth = 0;
+        this.expensesMonth = 0;
+        this.income = {};
+        this.incomeMonth = 0;
+        this.addIncome = [];
+        this.addExpenses = [];
+        this.deposit = false;
+        this.percentDeposit = 0;
+        this.moneyDeposit = 0;
+        this.mission = 5000000;
+        this.expenses = {};
+
+
+        let inputs = document.querySelectorAll('input');
+        inputs.forEach(element => {
+            if (element.type === 'text') {
+                element.value = '';
+                element.removeAttribute('disabled');
+            }
+            if (element.type === 'range')
+                element.value = 1;
+        });
+
+
+        //location.reload();
     },
     addExpensesBlock: function () {
         let cloneExpensesItem = expensesItems[0].cloneNode(true);
@@ -170,9 +197,9 @@ let appData = {
         return this.budgetMonth * periodSelect.value;
     }
 };
-let foo = appData.start.bind(appData);
-start.addEventListener('click', foo);
-cancel.addEventListener('click', bindMy(appData.reset, appData));
+
+start.addEventListener('click', appData.start.bind(appData));
+cancel.addEventListener('click', appData.reset.bind(appData));
 expensesPlus.addEventListener('click', appData.addExpensesBlock);
 incomePlus.addEventListener('click', appData.addIncomeBlock);
 periodSelect.addEventListener('change', appData.rangeListener);
@@ -180,13 +207,6 @@ salaryAmount.addEventListener('blur', function (event) {
     if (event.target.value !== '')
         start.setAttribute('style', 'display:block');
 });
-
-
-function bindMy(func, context) {
-    return function () {
-        return func.apply(context, arguments);
-    };
-}
 
 function IsNotOrEmpty(str) {
     if (str === '' || str === null || str === undefined)
