@@ -21,10 +21,11 @@ let incomePeriodValue = document.querySelector('.income_period-value');
 let targetMonthValue = document.querySelector('.target_month-value');
 
 let salaryAmount = document.querySelector('.salary-amount');
-let incomeTitle = document.querySelector('.income-items').querySelector('.income-title');
+let incomeTitle = document.querySelector('input.income-title');
 console.log(incomeTitle);
 let incomeAmount = document.querySelector('.income-amount');
-let expensesTitle = document.querySelector('.expenses-title');
+let expensesTitle = document.querySelector('input.expenses-title');
+console.log(expensesTitle);
 let expensesAmount = document.querySelector('.expenses-amount');
 let additionalExpensesItem = document.querySelector('.additional_expenses-item');
 let targetAmount = document.querySelector('.target-amount');
