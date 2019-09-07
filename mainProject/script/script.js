@@ -236,8 +236,36 @@ DomElement.prototype.createElement = function () {
     element.className = this.selector.substring(1);
     element.style.cssText = styleTxt;
     document.body.append(element);
+    return element;
 };
 
 const domElement = new DomElement('#newClass', '100px', '100px', 'red', '16px');
 console.log(domElement);
-domElement.createElement();
+let element = domElement.createElement();
+element.style.position = 'absolute';
+element.style.top = '0';
+addEventListener('keydown', function (event) {
+    console.log(event.keyCode);
+    let left = +element.style.left.slice(0, -2);
+    let top = +element.style.top.slice(0, -2);
+
+
+    switch (event.keyCode) {
+        case 37:
+            if (left > 0)
+                element.style.left = left - 10 + "px";
+            break;
+        case 38:
+            if (top > 0)
+                element.style.top = top - 10 + "px";
+            break;
+        case 39:
+            if (left < document.documentElement.clientWidth - 100)
+                element.style.left = left + 10 + "px";
+            break;
+        case 40:
+            if (top < document.documentElement.clientHeight - 100)
+                element.style.top = top + 10 + "px";
+            break;
+    }
+});
