@@ -66,7 +66,6 @@ AppData.prototype.showResult = function () {
     additionalIncomeValue.value = this.addIncome.join(', ');
     targetMonthValue.value = this.getTargetMonth();
     incomePeriodValue.value = this.calcPeriod();
-
     periodSelect.addEventListener('change', function (event) {
         incomePeriodValue.value = _this.calcPeriod();
     });
@@ -95,6 +94,8 @@ AppData.prototype.reset = function () {
         }
         if (element.type === 'range')
             element.value = 1;
+        if (element.type === 'checkbox')
+            element.checked = false;
     });
 };
 AppData.prototype.addExpensesBlock = function () {
