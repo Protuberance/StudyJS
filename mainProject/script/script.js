@@ -240,16 +240,13 @@ DomElement.prototype.createElement = function () {
 };
 
 const domElement = new DomElement('#newClass', '100px', '100px', 'red', '16px');
-console.log(domElement);
 let element = domElement.createElement();
 element.style.position = 'absolute';
 element.style.top = '0';
 addEventListener('keydown', function (event) {
-    console.log(event.keyCode);
     let left = +element.style.left.slice(0, -2);
     let top = +element.style.top.slice(0, -2);
-
-
+    
     switch (event.keyCode) {
         case 37:
             if (left > 0)
