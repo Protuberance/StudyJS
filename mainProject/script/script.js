@@ -1,10 +1,10 @@
-let start = document.getElementById('start');
-let buttons = document.getElementsByTagName('button');
-let incomePlus = buttons[0];
-let expensesPlus = buttons[1];
-let deposit = document.querySelector('#deposit-check');
-let additionalIncomeItem = document.querySelectorAll('.additional_income-item');
-let budgetMonthValue = document.querySelector('.budget_month-value'),
+const start = document.getElementById('start'),
+    buttons = document.getElementsByTagName('button'),
+    incomePlus = buttons[0],
+    expensesPlus = buttons[1],
+    depositCheck = document.querySelector('#deposit-check'),
+    additionalIncomeItem = document.querySelectorAll('.additional_income-item'),
+    budgetMonthValue = document.querySelector('.budget_month-value'),
     budgetDayValue = document.querySelector('.budget_day-value'),
     expensesMonthValue = document.querySelector('.expenses_month-value'),
     additionalIncomeValue = document.querySelector('.additional_income-value'),
@@ -14,13 +14,19 @@ let budgetMonthValue = document.querySelector('.budget_month-value'),
     salaryAmount = document.querySelector('.salary-amount'),
     incomeTitle = document.querySelector('input.income-title'),
     expensesTitle = document.querySelector('input.expenses-title'),
-    expensesItems = document.querySelectorAll('.expenses-items'),
     additionalExpensesItem = document.querySelector('.additional_expenses-item'),
     targetAmount = document.querySelector('.target-amount'),
     periodSelect = document.querySelector('.period-select'),
-    incomeItems = document.querySelectorAll('.income-items'),
     periodAmount = document.querySelector('.period-amount'),
-    cancel = document.querySelector('#cancel');
+    cancel = document.querySelector('#cancel'),
+    depositBank = document.querySelector('.deposit-bank'),
+    depositAmount = document.querySelector('.deposit-amount'),
+    depositPercent = document.querySelector('.deposit-percent');
+
+let expensesItems = document.querySelectorAll('.expenses-items'),
+    incomeItems = document.querySelectorAll('.income-items');
+
+
 //#region AppData
 const AppData = function () {
     this.budget = 0;
@@ -43,9 +49,10 @@ AppData.prototype.start = function () {
     this.getExpenses();
     this.getIncome();
     this.getExpensesMonth();
-    this.getAddExpenses();
-    this.getAddIncome();
+    this.getInfoDepost();
     this.getBudget();
+    this.getAddField(additionalExpensesItem, this.addExpenses, true);
+    this.getAddField(additionalIncomeItem, this.addIncome, false);
 
     this.showResult();
 
@@ -97,64 +104,57 @@ AppData.prototype.reset = function () {
         if (element.type === 'checkbox')
             element.checked = false;
     });
+    start.setAttribute('style', 'display:block');
+    cancel.setAttribute('style', 'display:none');
 };
-AppData.prototype.addExpensesBlock = function () {
-    let cloneExpensesItem = expensesItems[0].cloneNode(true);
-    expensesItems[0].parentNode.insertBefore(cloneExpensesItem, expensesPlus);
+AppData.prototype.addBlock = function (items, button) {
+    return function () {
+        let cloneItem = items[0].cloneNode(true);
+        items[0].parentNode.insertBefore(cloneItem, button);
 
-    expensesItems = document.querySelectorAll('.expenses-items');
-    if (expensesItems.length === 3) {
-        expensesPlus.style.display = 'none';
-    }
-};
-AppData.prototype.addIncomeBlock = function () {
-    let cloneIncomeItem = incomeItems[0].cloneNode(true);
-    incomeItems[0].parentNode.insertBefore(cloneIncomeItem, incomePlus);
-
-    incomeItems = document.querySelectorAll('.income-items');
-    if (incomeItems.length === 3) {
-        incomePlus.style.display = 'none';
-    }
+        items = document.querySelectorAll(`.${items[0].classList.item(0)}`);
+        if (items.length === 3) {
+            button.style.display = 'none';
+        }
+    };
 };
 AppData.prototype.rangeListener = function (event) {
     periodAmount.textContent = event.target.value;
 };
 AppData.prototype.getExpenses = function () {
-    let _this = this;
-    expensesItems.forEach(function (item) {
+    expensesItems = document.querySelectorAll('.expenses-items');
+    expensesItems.forEach((item) => {
         let itemExpenses = item.querySelector('.expenses-title').value;
         let cashExpenses = item.querySelector('.expenses-amount').value;
         if (itemExpenses !== '' && cashExpenses !== '')
-            _this.expenses[itemExpenses] = cashExpenses;
+            this.expenses[itemExpenses] = cashExpenses;
     });
 };
 AppData.prototype.getIncome = function () {
-    let _this = this;
-    incomeItems.forEach(function (item) {
+    incomeItems = document.querySelectorAll('.income-items');
+    incomeItems.forEach((item) => {
         let itemIncome = item.querySelector('.income-title').value;
         let cashIncome = item.querySelector('.income-amount').value;
         if (itemIncome !== '' && cashIncome !== '')
-            _this.income[itemIncome] = cashIncome;
+            this.income[itemIncome] = cashIncome;
     });
     for (let key in this.income) {
         this.incomeMonth += +this.income[key];
     }
 };
-AppData.prototype.getAddExpenses = function () {
-    let _this = this;
-    let addExpenses = additionalExpensesItem.value.split(',');
-    addExpenses.forEach(function (item) {
-        item = item.trim();
-        if (item !== '')
-            _this.addExpenses.push(item);
-    });
-};
-AppData.prototype.getAddIncome = function () {
-    let _this = this;
-    additionalIncomeItem.forEach(function (item) {
-        let itemValue = item.value.trim();
+AppData.prototype.getAddField = function (addedItems, arrayToAdd, toSplit) {
+    let items;
+
+    if (toSplit) {
+        items = addedItems.value.split(',')
+    } else {
+        items = addedItems;
+    }
+
+    items.forEach((item) => {
+        let itemValue = toSplit === true ? item.trim() : item.value.trim();
         if (itemValue !== '')
-            _this.addIncome.push(itemValue);
+            arrayToAdd.push(itemValue);
     });
 };
 AppData.prototype.getExpensesMonth = function () {
@@ -163,7 +163,7 @@ AppData.prototype.getExpensesMonth = function () {
     }
 };
 AppData.prototype.getBudget = function () {
-    this.budgetMonth = this.budget + this.incomeMonth - this.expensesMonth;
+    this.budgetMonth = this.budget + this.incomeMonth - this.expensesMonth + (this.moneyDeposit * this.percentDeposit) / 12;
     this.budgetDay = Math.floor(this.budgetMonth / 30);
 };
 AppData.prototype.getTargetMonth = function () {
@@ -185,11 +185,8 @@ AppData.prototype.getStatusIncome = function () {
 };
 AppData.prototype.getInfoDepost = function () {
     if (this.deposit) {
-        do {
-            this.percentDeposit = prompt('Какой годовой процент?', '10');
-            this.moneyDeposit = prompt('Какая сумма заложена?', '10000');
-        }
-        while (this.IsZeroOrNotNumber(this.percentDeposit) || this.IsZeroOrNotNumber(this.moneyDeposit))
+        this.percentDeposit = depositPercent.value;
+        this.moneyDeposit = depositAmount.value;
     }
 };
 AppData.prototype.calcPeriod = function () {
@@ -198,46 +195,41 @@ AppData.prototype.calcPeriod = function () {
 AppData.prototype.eventsListeners = function () {
     start.addEventListener('click', this.start.bind(this));
     cancel.addEventListener('click', this.reset.bind(this));
-    expensesPlus.addEventListener('click', this.addExpensesBlock);
-    incomePlus.addEventListener('click', this.addIncomeBlock);
+    expensesPlus.addEventListener('click', this.addBlock(expensesItems, expensesPlus));
+    incomePlus.addEventListener('click', this.addBlock(incomeItems, incomePlus));
     periodSelect.addEventListener('change', this.rangeListener);
-    salaryAmount.addEventListener('blur', function (event) {
-        if (event.target.value !== '')
-            start.setAttribute('style', 'display:block');
+    salaryAmount.addEventListener('keyup', function (event) {
+        if (this.value !== '')
+            start.removeAttribute('disabled');
+        else
+            start.setAttribute('disabled', 'true');
     });
 };
-AppData.prototype.IsZeroOrNotNumber = function (isNumber) {
-    if (isNumber === 0 || isNumber === null || isNaN(isNumber) || isNumber === undefined)
-        return true;
-    else return false;
-};
+
+depositCheck.addEventListener('change', function () {
+    if (depositCheck.checked) {
+        depositBank.style.display = 'inline-block';
+        depositAmount.style.display = 'inline-block';
+        appData.deposit = 'true';
+        depositBank.addEventListener('change', function () {
+            let selectIndex = this.options[this.selectedIndex].value;
+            if (selectIndex === 'other') {
+                depositPercent.style.display = 'inline-block';
+                depositPercent.value = '';
+            } else {
+                depositPercent.style.display = 'none';
+                depositPercent.value = selectIndex;
+            }
+
+        });
+    } else {
+        depositBank.style.display = 'none';
+        depositAmount.style.display = 'none';
+        depositAmount.value = '';
+        appData.deposit = 'false';
+    }
+});
 
 const appData = new AppData();
 appData.eventsListeners();
 //#endregion
-
-const DomElement = function (selector, height, width, bg, fontSize) {
-    this.selector = selector;
-    this.height = height;
-    this.width = width;
-    this.bg = bg;
-    this.fontSize = fontSize;
-};
-DomElement.prototype.createElement = function () {
-    let tagName;
-    if (this.selector.substring(0, 1) === '.') {
-        tagName = 'div';
-    } else if (this.selector.substring(0, 1) === '#') {
-        tagName = 'p';
-    } else
-        console.log('uncorrect selector');
-    let styleTxt = 'height:' + this.height + '; width:' + this.width + '; background:' + this.bg + '; font-size:' + this.fontSize + ';';
-    let element = document.createElement(tagName);
-    element.className = this.selector.substring(1);
-    element.style.cssText = styleTxt;
-    document.body.append(element);
-};
-
-const domElement = new DomElement('#newClass', '100px', '100px', 'red', '16px');
-console.log(domElement);
-domElement.createElement();
