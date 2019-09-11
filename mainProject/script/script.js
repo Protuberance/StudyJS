@@ -26,8 +26,6 @@ const start = document.getElementById('start'),
 let expensesItems = document.querySelectorAll('.expenses-items'),
     incomeItems = document.querySelectorAll('.income-items');
 
-
-
 class AppData {
     constructor() {
         this.budget = 0;
@@ -98,19 +96,27 @@ class AppData {
         inputs.forEach(element => {
             if (element.type === 'text') {
                 element.value = '';
-                element.removeAttribute('disabled');
             }
             if (element.type === 'range')
                 element.value = 1;
             if (element.type === 'checkbox')
                 element.checked = false;
         });
+        inputs = document.querySelectorAll('.data input[type=text]');
+        inputs.forEach(element => {
+            element.removeAttribute('disabled');
+        });
+
         start.setAttribute('style', 'display:block');
+        start.setAttribute('disabled', 'true');
         cancel.setAttribute('style', 'display:none');
     }
     addBlock(items, button) {
         return function () {
             let cloneItem = items[0].cloneNode(true);
+            cloneItem.querySelectorAll('input').forEach((item) => {
+                item.value = '';
+            });
             items[0].parentNode.insertBefore(cloneItem, button);
 
             items = document.querySelectorAll(`.${items[0].classList.item(0)}`);
@@ -164,7 +170,7 @@ class AppData {
         }
     }
     getBudget() {
-        this.budgetMonth = this.budget + this.incomeMonth - this.expensesMonth + (this.moneyDeposit * this.percentDeposit) / 12;
+        this.budgetMonth = Math.floor(this.budget + this.incomeMonth - this.expensesMonth + (this.moneyDeposit * this.percentDeposit) / 12);
         this.budgetDay = Math.floor(this.budgetMonth / 30);
     }
     getTargetMonth() {
@@ -193,6 +199,12 @@ class AppData {
     calcPeriod() {
         return this.budgetMonth * periodSelect.value;
     }
+    checkLetters(event) {
+        let pattern = /[a-zA-Z0-9]/s;
+        if (pattern.test(event.target.value)) {
+            event.preventDefault();
+        }
+    }
     eventsListeners() {
         start.addEventListener('click', this.start.bind(this));
         cancel.addEventListener('click', this.reset.bind(this));
@@ -204,6 +216,12 @@ class AppData {
                 start.removeAttribute('disabled');
             else
                 start.setAttribute('disabled', 'true');
+        });
+        let textInputs = document.querySelectorAll('input');
+        textInputs.forEach(element => {
+            if (element.placeholder === 'Наименование') {
+                element.addEventListener('input', this.checkLetters);
+            }
         });
     }
 };
