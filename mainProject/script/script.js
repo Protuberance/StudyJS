@@ -116,7 +116,11 @@ class AppData {
             let cloneItem = items[0].cloneNode(true);
             cloneItem.querySelectorAll('input').forEach((item) => {
                 item.value = '';
-            });
+                if (item.placeholder === 'Наименование') {
+                    item.addEventListener('keydown', this.checkLetter);
+                } else if (item.placeholder === 'Сумма')
+                    item.addEventListener('keydown', this.checkNumber);
+            }, this);
             items[0].parentNode.insertBefore(cloneItem, button);
 
             items = document.querySelectorAll(`.${items[0].classList.item(0)}`);
@@ -135,7 +139,7 @@ class AppData {
             let cashExpenses = item.querySelector('.expenses-amount').value;
             if (itemExpenses !== '' && cashExpenses !== '')
                 this.expenses[itemExpenses] = cashExpenses;
-        });
+        }, this);
     }
     getIncome() {
         incomeItems = document.querySelectorAll('.income-items');
@@ -144,7 +148,7 @@ class AppData {
             let cashIncome = item.querySelector('.income-amount').value;
             if (itemIncome !== '' && cashIncome !== '')
                 this.income[itemIncome] = cashIncome;
-        });
+        }, this);
         for (let key in this.income) {
             this.incomeMonth += +this.income[key];
         }
@@ -199,8 +203,7 @@ class AppData {
     calcPeriod() {
         return this.budgetMonth * periodSelect.value;
     }
-    checkLetters(event) {
-        console.log(event.key);
+    checkLetter(event) {
         if (event.key !== 'Backspace' && event.key !== 'Delete' && event.key !== 'ArrowLeft' && event.key !== 'ArrowRight') {
             let pattern = /^[а-я.,?!]+$/i;
             if (!pattern.test(event.key)) {
@@ -219,8 +222,8 @@ class AppData {
     eventsListeners() {
         start.addEventListener('click', this.start.bind(this));
         cancel.addEventListener('click', this.reset.bind(this));
-        expensesPlus.addEventListener('click', this.addBlock(expensesItems, expensesPlus));
-        incomePlus.addEventListener('click', this.addBlock(incomeItems, incomePlus));
+        expensesPlus.addEventListener('click', this.addBlock(expensesItems, expensesPlus).bind(this));
+        incomePlus.addEventListener('click', this.addBlock(incomeItems, incomePlus).bind(this));
         periodSelect.addEventListener('change', this.rangeListener);
         salaryAmount.addEventListener('keyup', function (event) {
             if (this.value !== '')
@@ -231,7 +234,7 @@ class AppData {
         let textInputs = document.querySelectorAll('input');
         textInputs.forEach(element => {
             if (element.placeholder === 'Наименование') {
-                element.addEventListener('keydown', this.checkLetters);
+                element.addEventListener('keydown', this.checkLetter);
             } else if (element.placeholder === 'Сумма')
                 element.addEventListener('keydown', this.checkNumber);
         });
