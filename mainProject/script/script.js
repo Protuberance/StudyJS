@@ -199,7 +199,7 @@ class AppData {
     calcPeriod() {
         return this.budgetMonth * periodSelect.value;
     }
-    checkLetters(event) {
+    checkLetter(event) {
         console.log(event.key);
         if (event.key !== 'Backspace' && event.key !== 'Delete' && event.key !== 'ArrowLeft' && event.key !== 'ArrowRight') {
             let pattern = /^[а-я.,?!]+$/i;
@@ -231,7 +231,7 @@ class AppData {
         let textInputs = document.querySelectorAll('input');
         textInputs.forEach(element => {
             if (element.placeholder === 'Наименование') {
-                element.addEventListener('keydown', this.checkLetters);
+                element.addEventListener('keydown', this.checkLetter);
             } else if (element.placeholder === 'Сумма')
                 element.addEventListener('keydown', this.checkNumber);
         });
