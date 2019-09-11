@@ -200,9 +200,20 @@ class AppData {
         return this.budgetMonth * periodSelect.value;
     }
     checkLetters(event) {
-        let pattern = /[a-zA-Z0-9]/s;
-        if (pattern.test(event.target.value)) {
-            event.preventDefault();
+        console.log(event.key);
+        if (event.key !== 'Backspace' && event.key !== 'Delete' && event.key !== 'ArrowLeft' && event.key !== 'ArrowRight') {
+            let pattern = /^[а-я.,?!]+$/i;
+            if (!pattern.test(event.key)) {
+                event.preventDefault();
+            }
+        }
+    }
+    checkNumber(event) {
+        if (event.key !== 'Backspace' && event.key !== 'Delete' && event.key !== 'ArrowLeft' && event.key !== 'ArrowRight') {
+            let pattern = /^[0-9]+$/i;
+            if (!pattern.test(event.key)) {
+                event.preventDefault();
+            }
         }
     }
     eventsListeners() {
@@ -220,8 +231,9 @@ class AppData {
         let textInputs = document.querySelectorAll('input');
         textInputs.forEach(element => {
             if (element.placeholder === 'Наименование') {
-                element.addEventListener('input', this.checkLetters);
-            }
+                element.addEventListener('keydown', this.checkLetters);
+            } else if (element.placeholder === 'Сумма')
+                element.addEventListener('keydown', this.checkNumber);
         });
     }
 };
