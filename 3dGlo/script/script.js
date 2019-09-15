@@ -4,9 +4,9 @@ window.addEventListener('DOMContentLoaded', function () {
         closeBtn = document.querySelector('.close-btn'),
         btnMenu = document.querySelector('.menu'),
         menuItems = menu.querySelectorAll('ul>li'),
-        popup = document.querySelector('.popup');
+        nextScrrenBtn = document.querySelector('main>a');
 
-    console.log(navigator.userAgent);
+    nextScrrenBtn.addEventListener('click', scrollTo);
     //#region Timer
     function countTimer(deadLine) {
 
@@ -57,10 +57,13 @@ window.addEventListener('DOMContentLoaded', function () {
         }
         btnMenu.addEventListener('click', handlerMenu);
         closeBtn.addEventListener('click', handlerMenu);
-        menuItems.forEach((element) => element.addEventListener('click', handlerMenu));
+        menuItems.forEach((element) => {
+            element.addEventListener('click', scrollTo);
+            element.addEventListener('click', handlerMenu);
+        });
     }
-    //#endregion
     toggleMenu();
+    //#endregion
 
     //#region popUp
     const togglePopUp = () => {
@@ -99,6 +102,36 @@ window.addEventListener('DOMContentLoaded', function () {
     }
     togglePopUp();
     //#endregion
+
+    function scrollTo(event) {
+        event.preventDefault();
+        let scrollToElementName,
+            eventTargetTag = event.target.tagName;
+        if (eventTargetTag === 'A') {
+            scrollToElementName = event.target.getAttribute('href');
+        } else if (eventTargetTag === 'LI') {
+            scrollToElementName = event.target.querySelector('a').getAttribute('href');
+        } else if (eventTargetTag === 'IMG') {
+            scrollToElementName = event.target.parentElement.getAttribute('href');
+        }
+        scrollToElementName = scrollToElementName.substring(1);
+
+        let scrollToElement = document.getElementById(scrollToElementName),
+            scrollToTopValue = scrollToElement.offsetTop,
+            indexScrollAnimation,
+            currentScrollTop = document.documentElement.scrollTop;
+
+        function scrollAnimation() {
+            indexScrollAnimation = requestAnimationFrame(scrollAnimation);
+            document.documentElement.scrollTop = currentScrollTop;
+            if (currentScrollTop >= scrollToTopValue) {
+                cancelAnimationFrame(indexScrollAnimation);
+                document.documentElement.scrollTop = scrollToTopValue;
+            }
+            currentScrollTop += 100;
+        }
+        indexScrollAnimation = requestAnimationFrame(scrollAnimation);
+    }
 
     function getPrettyTime(stringTime) {
         let _stringTime = stringTime.toString();
