@@ -50,6 +50,20 @@ window.addEventListener('DOMContentLoaded', function () {
     //#region Menu
     const toggleMenu = () => {
 
+        let behindMenu = document.createElement('div');
+        behindMenu.style.cssText = `opacity: 1;
+        display: block;
+        position: fixed;
+        left: -100%;
+        top: 0;
+        bottom: 0;
+        width: 100%;
+        height: 100%;
+        z-index: 9;
+        background-color: rgba(0, 0, 0, .5);`;
+        behindMenu.classList.add('behindMenu');
+        menu.insertBefore(behindMenu, null);
+
         const handlerMenu = () => {
             menu.classList.toggle('active-menu');
         };
