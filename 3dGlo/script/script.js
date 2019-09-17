@@ -1,6 +1,6 @@
 window.addEventListener('DOMContentLoaded', function () {
     'use strict'
-    let menu = document.querySelector('menu'),
+    const menu = document.querySelector('menu'),
         btnMenu = document.querySelector('.menu'),
         nextScrrenBtn = document.querySelector('main>a');
 
@@ -49,8 +49,7 @@ window.addEventListener('DOMContentLoaded', function () {
 
     //#region Menu
     const toggleMenu = () => {
-
-        let behindMenu = document.createElement('div');
+        const behindMenu = document.createElement('div');
         behindMenu.style.cssText = `opacity: 1;
         display: block;
         position: fixed;
@@ -168,6 +167,7 @@ window.addEventListener('DOMContentLoaded', function () {
         event.preventDefault();
         let scrollToElementName,
             eventTargetTag = event.target.tagName;
+
         if (eventTargetTag === 'A') {
             scrollToElementName = event.target.getAttribute('href');
         } else if (eventTargetTag === 'LI') {
@@ -195,7 +195,7 @@ window.addEventListener('DOMContentLoaded', function () {
     }
 
     function getPrettyTime(stringTime) {
-        let _stringTime = stringTime.toString();
+        const _stringTime = stringTime.toString();
         if (_stringTime.length < 2)
             return '0' + _stringTime;
         else return _stringTime;
