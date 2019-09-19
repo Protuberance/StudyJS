@@ -260,6 +260,36 @@ window.addEventListener('DOMContentLoaded', function () {
     slider();
     //#endregion
 
+    //#region Command
+    const command = () => {
+        const command = document.querySelectorAll('.command .row img'),
+            changePhoto = (event) => {
+                let previousSource = event.target.getAttribute('src');
+                event.target.setAttribute('src', event.target.dataset.img);
+                event.target.dataset.img = previousSource;
+            };
+
+        command.forEach((elem) => {
+            elem.addEventListener('mouseenter', changePhoto);
+            elem.addEventListener('mouseleave', changePhoto);
+        });
+
+    };
+    command();
+    //#endregion
+
+    //#region Calc
+    const calc = () => {
+        const inputs = document.querySelectorAll('.calck-block input');
+        inputs.forEach((elem) => {
+            elem.addEventListener('input', (e) => {
+                e.target.value = e.target.value.replace(/D/, '');
+            });
+        });
+
+    }
+    calc();
+    //#endregion
 
     function scrollTo(event) {
         event.preventDefault();
