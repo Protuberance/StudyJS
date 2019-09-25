@@ -44,7 +44,7 @@ window.addEventListener('DOMContentLoaded', function () {
             timerSeconds.textContent = getPrettyTime(timer.seconds);
         }
     }
-    countTimer('1 january 2020');
+    countTimer('8 november 2019');
     //#endregion
 
     //#region Menu
@@ -118,7 +118,7 @@ window.addEventListener('DOMContentLoaded', function () {
             if (target.classList.contains('popup-close')) {
                 popUp.style.display = 'none';
             } else {
-                target = target.closest('.popup-contnet');
+                target = target.closest('.popup-content');
 
                 if (!target) {
                     popUp.style.display = 'none';
@@ -287,7 +287,7 @@ window.addEventListener('DOMContentLoaded', function () {
         const inputs = document.querySelectorAll('.calck-block input');
         inputs.forEach((elem) => {
             elem.addEventListener('input', (e) => {
-                e.target.value = e.target.value.replace(/D/, '');
+                e.target.value = e.target.value.replace(/\D/, '');
             });
         });
 
@@ -357,6 +357,89 @@ window.addEventListener('DOMContentLoaded', function () {
     };
 
     calc(100);
+    //#endregion
+
+    //#region send-ajax-form
+    const sendForm = () => {
+        const errorMessage = 'Что-то пошло не так...',
+            loadMesasge = 'Загрузка...',
+            successMesage = 'Спасибо! Мы скоро с вами свяжемся!';
+
+        const form = document.getElementById('form1'),
+            popUpForm = document.getElementById('form3'),
+            contactForm = document.getElementById('form2');
+
+        const statusMessage = document.createElement('div');
+        statusMessage.style.cssText = 'font-size: 2rem; color: white;';
+
+        const formHandler = (event) => {
+            event.preventDefault();
+            event.target.appendChild(statusMessage);
+            statusMessage.textContent = loadMesasge;
+
+            const inputs = event.target.querySelectorAll('input');
+            inputs.forEach(item => {
+                item.value = '';
+            });
+
+            const formData = new FormData(event.target);
+            let body = {};
+
+            formData.forEach((key, value) => {
+                body[key] = value;
+            });
+
+            postData(body, () => {
+                statusMessage.textContent = successMesage;
+            }, (error) => {
+                statusMessage.textContent = errorMessage;
+                console.error(error);
+            });
+        };
+
+        const postData = (body, successCallback, errorCallback) => {
+
+            const request = new XMLHttpRequest();
+            request.addEventListener('readystatechange', () => {
+                if (request.readyState !== 4) {
+                    return;
+                }
+                if (request.status === 200) {
+                    successCallback();
+                } else {
+                    errorCallback(request.status);
+                }
+            });
+            request.open('POST', './server.php');
+            request.setRequestHeader('Content-Type', 'application/json');
+            request.send(JSON.stringify(body));
+        };
+
+        form.addEventListener('submit', formHandler);
+        popUpForm.addEventListener('submit', formHandler);
+        contactForm.addEventListener('submit', formHandler);
+    };
+    sendForm();
+    //#endregion
+
+    //#region CheckValid
+    const checkValid = () => {
+        const telInputs = document.querySelectorAll('input');
+
+        telInputs.forEach((elem) => {
+
+            if (elem.type === 'tel') {
+                elem.addEventListener('input', (e) => {
+                    e.target.value = e.target.value.replace(/[^\d\+]/, '');
+                });
+            } else if (elem.placeholder === 'Ваше имя' || elem.placeholder === 'Ваше сообщение') {
+                elem.addEventListener('input', (e) => {
+                    e.target.value = e.target.value.replace(/[^А-Я\s]/i, '');
+                });
+            }
+        });
+    };
+    checkValid();
     //#endregion
 
     function scrollTo(event) {
