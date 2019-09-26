@@ -375,7 +375,8 @@ window.addEventListener('DOMContentLoaded', function () {
         const formHandler = (event) => {
             event.preventDefault();
             event.target.appendChild(statusMessage);
-            statusMessage.textContent = loadMesasge;
+            // statusMessage.textContent = loadMesasge;
+            loadImage(statusMessage);
 
             const inputs = event.target.querySelectorAll('input');
             inputs.forEach(item => {
@@ -399,6 +400,14 @@ window.addEventListener('DOMContentLoaded', function () {
                     console.error(error);
                 });
         };
+
+        const loadImage = (container) => {
+            container.textContent = '';
+            const img = document.createElement('img');
+            img.setAttribute('src', './images/loading/circle-loading-animation.gif');
+            img.style.cssText = `max-width: 100px`;
+            container.appendChild(img);
+        }
 
         const postData = (body) => {
             return fetch('./server.php', {
