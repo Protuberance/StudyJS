@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+    <div id="flexWrapper">
+        <div id="catsWrapper">
+            <div id="catsContainer"></div>
+            <button id="getCat" data-src="https://aws.random.cat/meow">Get Cat</button>
+        </div>
+    <div id="dogsWrapper">
+        <div id="dogsContainer"></div>
+        <button id="getDog" data-src="https://random.dog/woof.json">Get Dog</button>
+    </div>
+    <script src="script.js"></script>
+</div>
+</body>
+<style>
+#flexWrapper{
+    display: flex;
+    flex-flow: row nowrap;
+    width: 500px;
+    height: 250px;
+}
+#catsContainer,#dogsContainer{
+    width: 250px;
+    height: 250px;
+    background: green;
+}
+</style>
+</html>
