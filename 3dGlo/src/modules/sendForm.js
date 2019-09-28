@@ -28,12 +28,12 @@ const sendForm = () => {
             body[key] = value;
         });
         postData(body)
-            .then((response) => {
+            .then(function(response){
                 if (response.status !== 200) {
                     throw new Error('Status network is not 200');
                 }
                 statusMessage.textContent = successMesage;
-            }).catch((error) => {
+            }).catch(function(error){
                 statusMessage.textContent = errorMessage;
                 console.error(error);
             });
