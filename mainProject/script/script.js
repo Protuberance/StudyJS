@@ -43,6 +43,7 @@ class AppData {
         this.expenses = {};
     }
     start() {
+
         this.budget = +salaryAmount.value;
 
         this.getExpenses();
@@ -54,14 +55,7 @@ class AppData {
         this.getAddField(additionalIncomeItem, this.addIncome, false);
 
         this.showResult();
-
-        let inputs = document.querySelectorAll('.data input');
-        inputs.forEach(element => {
-            if (element.getAttribute('type') === 'text')
-                element.setAttribute('disabled', 'true');
-        });
-        start.setAttribute('style', 'display:none');
-        cancel.setAttribute('style', 'display:block');
+        this.setCalculatedState();
     }
     showResult() {
         let _this = this;
@@ -75,6 +69,7 @@ class AppData {
         periodSelect.addEventListener('change', function (event) {
             incomePeriodValue.value = _this.calcPeriod();
         });
+        this.saveCookies();
     }
     reset() {
         this.budget = 0;
@@ -110,6 +105,8 @@ class AppData {
         start.setAttribute('style', 'display:block');
         start.setAttribute('disabled', 'true');
         cancel.setAttribute('style', 'display:none');
+
+        this.clearAllStorage();
     }
     addBlock(items, button) {
         return function () {
@@ -200,7 +197,6 @@ class AppData {
         return this.budgetMonth * periodSelect.value;
     }
     checkLetters(event) {
-        console.log(event.key);
         if (event.key !== 'Backspace' && event.key !== 'Delete' && event.key !== 'ArrowLeft' && event.key !== 'ArrowRight') {
             let pattern = /^[а-я.,?!]+$/i;
             if (!pattern.test(event.key)) {
@@ -236,6 +232,69 @@ class AppData {
                 element.addEventListener('keydown', this.checkNumber);
         });
     }
+    saveCookies() {
+        const inputs = document.querySelector('.result').querySelectorAll('input');
+
+        inputs.forEach((element) => {
+            const title = element.previousElementSibling.textContent;
+            const cooka = title + '=' + element.value + ';max-age=3600';
+            document.cookie = cooka;
+            localStorage.setItem(title, element.value);
+        });
+
+        document.cookie = 'isLoaded=true';
+    }
+    tryUploadCookies() {
+        const inputs = document.querySelector('.result').querySelectorAll('input');
+        let success = true;
+        inputs.forEach((element) => {
+            let savedValue = this.getCookie(element.previousElementSibling.textContent);
+            if (savedValue === undefined || savedValue !== localStorage.getItem(element.previousElementSibling.textContent)) {
+                success = false;
+            } else {
+                element.value = savedValue;
+            }
+        });
+        if (success) {
+            this.setCalculatedState();
+        } else {
+            this.clearAllStorage();
+            this.reset();
+        }
+    }
+    getCookie(name) {
+        let matches = document.cookie.match(new RegExp(
+            "(?:^|; )" + name.replace(/([\.$?*|{}\(\)\[\]\\\/\+^])/g, '\\$1') + "=([^;]*)"
+        ));
+        return matches ? decodeURIComponent(matches[1]) : undefined;
+    }
+    checkSavedCookies() {
+        const isLoaded = this.getCookie('isLoaded');
+        if (isLoaded === 'true') {
+            this.tryUploadCookies();
+        }
+    }
+    setCalculatedState() {
+        let inputs = document.querySelectorAll('.data input');
+        inputs.forEach(element => {
+            if (element.getAttribute('type') === 'text')
+                element.setAttribute('disabled', 'true');
+        });
+        start.setAttribute('style', 'display:none');
+        cancel.setAttribute('style', 'display:block');
+    }
+    clearAllStorage() {
+        const inputs = document.querySelector('.result').querySelectorAll('input');
+
+        inputs.forEach((element) => {
+            const title = element.previousElementSibling.textContent;
+            const cooka = title + '=' + ';max-age=0';
+            document.cookie = cooka;
+        });
+
+        document.cookie = 'isLoaded=false';
+        localStorage.clear();
+    }
 };
 
 depositCheck.addEventListener('change', function () {
@@ -264,3 +323,4 @@ depositCheck.addEventListener('change', function () {
 
 const appData = new AppData();
 appData.eventsListeners();
+appData.checkSavedCookies();
