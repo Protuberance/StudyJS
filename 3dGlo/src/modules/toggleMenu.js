@@ -1,19 +1,7 @@
 const toggleMenu = () => {
-    // const behindMenu = document.createElement('div'),
     const menu = document.querySelector('menu'),
-        btnMenu = document.querySelector('.menu');
-    // behindMenu.style.cssText = `opacity: 1;
-    // display: block;
-    // position: fixed;
-    // left: -100%;
-    // top: 0;
-    // bottom: 0;
-    // width: 100%;
-    // height: 100%;
-    // z-index: 9;
-    // background-color: rgba(0, 0, 0, .5);`;
-    // behindMenu.classList.add('behindMenu');
-    // menu.appendChild(behindMenu, null);
+        btnMenu = document.querySelector('.menu'),
+        nextScrrenBtn = document.querySelector('main>a');
 
     const switchStateMenu = () => {
         menu.classList.toggle('active-menu');
@@ -33,6 +21,39 @@ const toggleMenu = () => {
             switchStateMenu();
         }
     };
+    const scrollTo = () => {
+        event.preventDefault();
+        let scrollToElementName,
+            eventTargetTag = event.target.tagName;
+
+        if (eventTargetTag.toLowerCase() === 'a') {
+            scrollToElementName = event.target.getAttribute('href');
+        } else if (eventTargetTag.toLowerCase() === 'li') {
+            scrollToElementName = event.target.querySelector('a').getAttribute('href');
+        } else if (eventTargetTag.toLowerCase() === 'img') {
+            scrollToElementName = event.target.parentElement.getAttribute('href');
+        }
+        scrollToElementName = scrollToElementName.substring(1);
+
+        let scrollToElement = document.getElementById(scrollToElementName),
+            scrollToTopValue = scrollToElement.offsetTop,
+            indexScrollAnimation,
+            currentScrollTop = document.documentElement.scrollTop;
+
+        function scrollAnimation() {
+            indexScrollAnimation = requestAnimationFrame(scrollAnimation);
+            document.documentElement.scrollTop = currentScrollTop;
+            if (currentScrollTop >= scrollToTopValue) {
+                cancelAnimationFrame(indexScrollAnimation);
+                document.documentElement.scrollTop = scrollToTopValue;
+            }
+            currentScrollTop += 100;
+        }
+        indexScrollAnimation = requestAnimationFrame(scrollAnimation);
+    };
+
+
+    nextScrrenBtn.addEventListener('click', scrollTo);
     document.body.addEventListener('click', closeMenu);
     menu.addEventListener('click', menuListener);
     btnMenu.addEventListener('click', switchStateMenu);
