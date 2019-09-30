@@ -1,6 +1,5 @@
 const sendForm = () => {
     const errorMessage = 'Что-то пошло не так...',
-        loadMesasge = 'Загрузка...',
         successMesage = 'Спасибо! Мы скоро с вами свяжемся!';
 
     const form = document.getElementById('form1'),
@@ -13,13 +12,8 @@ const sendForm = () => {
     const formHandler = (event) => {
         event.preventDefault();
         event.target.appendChild(statusMessage);
-        // statusMessage.textContent = loadMesasge;
         loadImage(statusMessage);
 
-        const inputs = event.target.querySelectorAll('input');
-        inputs.forEach(item => {
-            item.value = '';
-        });
 
         const formData = new FormData(event.target);
         let body = {};
@@ -28,15 +22,20 @@ const sendForm = () => {
             body[key] = value;
         });
         postData(body)
-            .then(function(response){
+            .then(function (response) {
                 if (response.status !== 200) {
                     throw new Error('Status network is not 200');
                 }
                 statusMessage.textContent = successMesage;
-            }).catch(function(error){
+            }).catch(function (error) {
                 statusMessage.textContent = errorMessage;
                 console.error(error);
             });
+
+        const inputs = event.target.querySelectorAll('input');
+        inputs.forEach(item => {
+            item.value = '';
+        });
     };
 
     const loadImage = (container) => {
