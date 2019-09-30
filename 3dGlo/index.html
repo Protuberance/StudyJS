@@ -424,6 +424,7 @@
 
     <script src="./dist/main.js?ver=151"></script>
     <script src="./src/sliderCarousel.js"></script>
+    <script src="./src/maskPhone.js"></script>
     <script>
         const carousel = new sliderCarousel({
             main: '.companies-wrapper',
@@ -445,6 +446,10 @@
             ]
         });
         carousel.init();
+
+        maskPhone('#form1 input[type=tel]');
+        maskPhone('#form2 input[type=tel]');
+        maskPhone('#form3 input[type=tel]');
     </script>
 </body>
 

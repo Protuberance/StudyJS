@@ -121,7 +121,6 @@ outline: transparent;
                 this.options.position = this.slides.length - this.slidesToShow;
             }
             this.wrap.style.transform = `translateX(-${this.options.position * this.options.widthSlide}%)`;
-            console.log(this.options.position);
         }
     }
     nextSlider() {
@@ -131,7 +130,6 @@ outline: transparent;
                 this.options.position = 0;
             }
             this.wrap.style.transform = `translateX(-${this.options.position * this.options.widthSlide}%)`;
-            console.log(this.options.position);
         }
     }
     responseInit() {
@@ -161,5 +159,3 @@ outline: transparent;
         window.addEventListener('resize', checkResponse);
     }
 }
-
-export default sliderCarousel;
