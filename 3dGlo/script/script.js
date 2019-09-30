@@ -116,9 +116,9 @@ window.addEventListener('DOMContentLoaded', function () {
             if (target.classList.contains('popup-close')) {
                 popUp.style.display = 'none';
             } else {
-                target = target.closest('.popup-contnet');
+                target = target.closest('.popup-content');
 
-                if (target) {
+                if (!target) {
                     popUp.style.display = 'none';
                 }
             }
