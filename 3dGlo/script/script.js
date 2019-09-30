@@ -127,6 +127,21 @@ window.addEventListener('DOMContentLoaded', function () {
     togglePopUp();
     //#endregion
 
+    //#region CheckTextInputs
+    const checkValid = () => {
+        const telInputs = document.querySelectorAll('input');
+
+        telInputs.forEach((elem) => {
+            if (elem.placeholder === 'Ваше имя' || elem.placeholder === 'Ваше сообщение') {
+                elem.addEventListener('input', (e) => {
+                    e.target.value = e.target.value.replace(/[^А-ЯЁ\s]/i, '');
+                });
+            }
+        });
+    };
+    checkValid();
+    //#endregion
+
     //#region Tabs
     const tabs = () => {
         const tabHeader = document.querySelector('.service-header'),
