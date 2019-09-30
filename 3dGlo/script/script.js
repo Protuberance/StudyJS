@@ -118,7 +118,7 @@ window.addEventListener('DOMContentLoaded', function () {
             } else {
                 target = target.closest('.popup-contnet');
 
-                if (!target) {
+                if (target) {
                     popUp.style.display = 'none';
                 }
             }
