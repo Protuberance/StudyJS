@@ -62,7 +62,11 @@ window.addEventListener('DOMContentLoaded', function () {
         background-color: rgba(0, 0, 0, .5);`;
         behindMenu.classList.add('behindMenu');
         menu.insertBefore(behindMenu, null);
-
+        const closeMenu = (event) => {
+            if (!event.target.closest('menu') && !event.target.closest('.menu')) {
+                menu.classList.remove('active-menu');
+            }
+        };
         const handlerMenu = () => {
             menu.classList.toggle('active-menu');
         };
@@ -77,6 +81,7 @@ window.addEventListener('DOMContentLoaded', function () {
             }
         };
 
+        document.body.addEventListener('click', closeMenu);
         menu.addEventListener('click', menuListener);
         btnMenu.addEventListener('click', handlerMenu);
     };
@@ -364,11 +369,11 @@ window.addEventListener('DOMContentLoaded', function () {
         let scrollToElementName,
             eventTargetTag = event.target.tagName;
 
-        if (eventTargetTag === 'A') {
+        if (eventTargetTag.toLowerCase() === 'a') {
             scrollToElementName = event.target.getAttribute('href');
-        } else if (eventTargetTag === 'LI') {
+        } else if (eventTargetTag.toLowerCase() === 'li') {
             scrollToElementName = event.target.querySelector('a').getAttribute('href');
-        } else if (eventTargetTag === 'IMG') {
+        } else if (eventTargetTag.toLowerCase() === 'img') {
             scrollToElementName = event.target.parentElement.getAttribute('href');
         }
         scrollToElementName = scrollToElementName.substring(1);
