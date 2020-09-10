@@ -422,6 +422,35 @@
         </div>
     </div>
 
-<script src="./script/script.js"></script>
+    <script src="./dist/main.js?ver=151"></script>
+    <script src="./src/sliderCarousel.js"></script>
+    <script src="./src/maskPhone.js"></script>
+    <script>
+        const carousel = new sliderCarousel({
+            main: '.companies-wrapper',
+            wrap: '.companies-hor',
+            slidesToShow: 4,
+            infinity: true,
+            responsive: [{
+                    breakpoint: 1024,
+                    slidesToShow: 3,
+                },
+                {
+                    breakpoint: 768,
+                    slidesToShow: 2,
+                },
+                {
+                    breakpoint: 576,
+                    slidesToShow: 1,
+                }
+            ]
+        });
+        carousel.init();
+
+        maskPhone('#form1 input[type=tel]');
+        maskPhone('#form2 input[type=tel]');
+        maskPhone('#form3 input[type=tel]');
+    </script>
 </body>
+
 </html>
